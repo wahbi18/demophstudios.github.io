@@ -1,46 +1,41 @@
-<!-- File: /index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Demoph Studios</title>
-  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link href="/assets/css/style.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white font-sans">
+<body class="bg-black text-white font-sans min-h-screen flex flex-col">
   <header class="p-6 border-b border-gray-800">
     <h1 class="text-3xl font-bold">Demoph Studios</h1>
     <p class="text-gray-400">We build worlds. And the tools to make them.</p>
   </header>
-
-  <main class="p-6 space-y-12">
+  <main class="p-6 flex-grow space-y-12 max-w-4xl mx-auto">
     <section>
       <h2 class="text-2xl font-semibold mb-2">What We Do</h2>
       <p class="text-gray-300">
-        Demoph Studios is an independent game development studio creating immersive experiences and powerful tools for developers.
+        Demoph Studios is an indie game dev studio creating immersive experiences and powerful tools for developers.
       </p>
     </section>
-
     <section>
       <h2 class="text-2xl font-semibold mb-2">Our Projects</h2>
       <div class="space-y-4">
-        <div class="bg-gray-900 p-4 rounded-xl shadow">
+        <article class="bg-gray-900 p-4 rounded-xl shadow">
           <h3 class="text-xl font-bold">Demoph Engine</h3>
-          <p class="text-gray-400">A modern C++ engine with Vulkan, OpenGL, Bullet Physics, and OpenAL.</p>
-        </div>
-        <div class="bg-gray-900 p-4 rounded-xl shadow">
-          <h3 class="text-xl font-bold">Upcoming Game Project</h3>
-          <p class="text-gray-400">Currently in stealth. Expect something weird, wild, and probably genre-defying.</p>
-        </div>
+          <p class="text-gray-400">Modern C++ engine supporting Vulkan, OpenGL, Bullet Physics, and OpenAL.</p>
+        </article>
+        <article class="bg-gray-900 p-4 rounded-xl shadow">
+          <h3 class="text-xl font-bold">Upcoming Game</h3>
+          <p class="text-gray-400">Currently in stealth mode. Expect something wild and genre-defying.</p>
+        </article>
       </div>
     </section>
-
     <section>
       <h2 class="text-2xl font-semibold mb-2">Devlog / Blog</h2>
       <a href="/blog/index.html" class="text-blue-400 hover:underline">View Blog Posts →</a>
     </section>
-
     <section>
       <h2 class="text-2xl font-semibold mb-2">Follow Us</h2>
       <ul class="space-y-2">
@@ -50,11 +45,9 @@
       </ul>
     </section>
   </main>
-
-  <footer class="p-6 border-t border-gray-800 text-sm text-gray-500">
+  <footer class="p-6 border-t border-gray-800 text-sm text-gray-500 text-center">
     &copy; <span id="year"></span> Demoph Studios. All rights reserved.
   </footer>
-
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
