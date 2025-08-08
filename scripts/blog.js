@@ -1,4 +1,4 @@
-// File: /assets/js/admin.js
+// File: /assets/js/blog.js
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 import { marked } from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
 
@@ -7,86 +7,35 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJidm95YnJ1a25kY3Vob2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MTEwOTUsImV4cCI6MjA3MDE4NzA5NX0.NpWuEjax44L5-wjoEHaDh32NQjr5qN3hawRKRHgIbag'
 );
 
-const titleInput = document.getElementById('title');
-const contentInput = document.getElementById('content');
-const submitBtn = document.getElementById('submit');
-const preview = document.getElementById('preview');
-const postsList = document.getElementById('postList');
-const logoutBtn = document.getElementById('logout');
+const container = document.getElementById('posts');
 
-supabase.auth.getSession().then(({ data }) => {
-  if (!data.session) window.location.href = '/su/login.html';
-});
+async function loadPosts() {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .order('date', { ascending: false });
 
-logoutBtn?.addEventListener('click', async () => {
-  await supabase.auth.signOut();
-  window.location.href = '/su/login.html';
-});
-
-submitBtn.addEventListener('click', async () => {
-  const title = titleInput.value.trim();
-  const content = contentInput.value.trim();
-
-  if (!title || !content) {
-    alert('Please enter both title and content');
+  if (error) {
+    container.innerHTML = `<p class="text-red-500">Failed to load posts: ${error.message}</p>`;
     return;
   }
 
-  const { error } = await supabase.from('posts').insert([
-    {
-      title,
-      content,
-      date: new Date().toISOString()
-    }
-  ]);
-
-  if (error) {
-    alert('Error publishing post: ' + error.message);
-  } else {
-    alert('Post published!');
-    titleInput.value = '';
-    contentInput.value = '';
-    loadPosts();
+  if (!data.length) {
+    container.innerHTML = '<p class="text-gray-500">No posts yet.</p>';
+    return;
   }
-});
 
-contentInput.addEventListener('input', () => {
-  preview.innerHTML = marked.parse(contentInput.value);
-});
-
-async function loadPosts() {
-  const { data, error } = await supabase.from('posts').select('*').order('date', { ascending: false });
-  postsList.innerHTML = '';
-  if (error || !data) return;
-  data.forEach(post => {
-    const div = document.createElement('div');
+  container.innerHTML = '';
+  data.forEach((post) => {
+    const div = document.createElement('article');
     div.className = 'bg-gray-900 p-4 rounded-xl shadow';
     div.innerHTML = `
-      <h2 class="text-xl font-bold" contenteditable onblur="updatePostTitle(${post.id}, this.innerText)">${post.title}</h2>
+      <h2 class="text-xl font-bold">${post.title}</h2>
       <p class="text-gray-500 text-sm">${new Date(post.date).toLocaleDateString()}</p>
-      <div class="text-gray-300 mt-2" contenteditable onblur="updatePostContent(${post.id}, this.innerText)">${marked.parse(post.content)}</div>
-      <div class="mt-4 space-x-2">
-        <button onclick="deletePost(${post.id})" class="bg-red-600 px-2 py-1 rounded">Delete</button>
-      </div>
+      <div class="text-gray-300 mt-2">${marked.parse(post.content)}</div>
     `;
-    postsList.appendChild(div);
+    container.appendChild(div);
   });
 }
-
-window.deletePost = async (id) => {
-  const confirmDel = confirm('Are you sure you want to delete this post?');
-  if (!confirmDel) return;
-  const { error } = await supabase.from('posts').delete().eq('id', id);
-  if (error) alert('Error deleting');
-  else loadPosts();
-};
-
-window.updatePostTitle = async (id, newTitle) => {
-  await supabase.from('posts').update({ title: newTitle }).eq('id', id);
-};
-
-window.updatePostContent = async (id, newContent) => {
-  await supabase.from('posts').update({ content: newContent }).eq('id', id);
-};
 
 loadPosts();
