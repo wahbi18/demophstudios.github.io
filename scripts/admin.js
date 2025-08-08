@@ -1,21 +1,37 @@
-function publishPost() {
-  const title = document.getElementById('title').value.trim();
-  const content = document.getElementById('content').value.trim();
+// File: /assets/js/admin.js
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  if (!title || !content) return alert('Fill in both fields');
+const supabase = createClient(
+  'https://qptbbvoybrukndcuhoip.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJidm95YnJ1a25kY3Vob2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MTEwOTUsImV4cCI6MjA3MDE4NzA5NX0.NpWuEjax44L5-wjoEHaDh32NQjr5qN3hawRKRHgIbag'
+);
 
-  const post = {
-    id: Date.now(),
-    title,
-    date: new Date().toISOString().split('T')[0],
-    content
-  };
+const titleInput = document.getElementById('title');
+const contentInput = document.getElementById('content');
+const submitBtn = document.getElementById('submit');
 
-  const posts = JSON.parse(localStorage.getItem('demoph_posts') || '[]');
-  posts.push(post);
-  localStorage.setItem('demoph_posts', JSON.stringify(posts));
+submitBtn.addEventListener('click', async () => {
+  const title = titleInput.value.trim();
+  const content = contentInput.value.trim();
 
-  alert('Post published!');
-  document.getElementById('title').value = '';
-  document.getElementById('content').value = '';
-}
+  if (!title || !content) {
+    alert('Please enter both title and content');
+    return;
+  }
+
+  const { error } = await supabase.from('posts').insert([
+    {
+      title,
+      content,
+      date: new Date().toISOString()
+    }
+  ]);
+
+  if (error) {
+    alert('Error publishing post: ' + error.message);
+  } else {
+    alert('Post published!');
+    titleInput.value = '';
+    contentInput.value = '';
+  }
+});
