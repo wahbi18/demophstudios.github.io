@@ -1,0 +1,67 @@
+<!-- File: /su/login.html -->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demoph Studios Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen font-sans">
+  <main class="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-lg">
+    <h1 class="text-2xl font-bold mb-6 text-center">Admin Login</h1>
+    <form id="login-form" class="space-y-4">
+      <input
+        id="email"
+        type="email"
+        placeholder="Email"
+        required
+        class="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        required
+        class="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <button
+        type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded font-semibold"
+      >
+        Sign In
+      </button>
+      <p id="error-msg" class="text-red-500 text-sm mt-2 hidden"></p>
+    </form>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(
+      'https://qptbbvoybrukndcuhoip.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJidm95YnJ1a25kY3Vob2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MTEwOTUsImV4cCI6MjA3MDE4NzA5NX0.NpWuEjax44L5-wjoEHaDh32NQjr5qN3hawRKRHgIbag'
+    );
+
+    const form = document.getElementById('login-form');
+    const errorMsg = document.getElementById('error-msg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.add('hidden');
+      const email = form.email.value.trim();
+      const password = form.password.value;
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errorMsg.textContent = error.message;
+        errorMsg.classList.remove('hidden');
+      } else {
+        // Redirect to admin panel after login
+        window.location.href = '/su/admin/index.html';
+      }
+    });
+  </script>
+</body>
+</html>
