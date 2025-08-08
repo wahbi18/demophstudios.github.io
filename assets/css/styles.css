@@ -1,0 +1,10 @@
+/* File: /assets/css/style.css */
+body {
+  margin: 0;
+  background-color: #000000;
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a {
+  color: #3b82f6;
