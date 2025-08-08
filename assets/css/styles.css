@@ -1,10 +1,48 @@
-/* File: /assets/css/style.css */
-body {
-  margin: 0;
-  background-color: #000000;
-  color: #eee;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+a:hover {
+  text-decoration: underline;
 }
 
-a {
-  color: #3b82f6;
+h1, h2, h3, h4 {
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.5;
+}
+
+pre {
+  background: #1e1e1e;
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 10px;
+}
+
+/* Responsive container */
+@media (max-width: 640px) {
+  body, main, header, footer {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}
