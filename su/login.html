@@ -1,4 +1,3 @@
-<!-- File: /su/login.html -->
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -9,8 +8,8 @@
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen font-sans">
   <main class="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-lg">
-    <h1 class="text-2xl font-bold mb-6 text-center">Admin Login</h1>
-    <form id="login-form" class="space-y-4">
+    <h1 class="text-2xl font-bold mb-6 text-center">Admin Login / Sign Up</h1>
+    <form id="auth-form" class="space-y-4">
       <input
         id="email"
         type="email"
@@ -31,8 +30,11 @@
       >
         Sign In
       </button>
-      <p id="error-msg" class="text-red-500 text-sm mt-2 hidden"></p>
     </form>
+    <p class="text-center mt-4 text-gray-400">
+      Don't have an account? <button id="signup-btn" class="text-blue-400 underline">Sign Up</button>
+    </p>
+    <p id="error-msg" class="text-red-500 text-sm mt-2 hidden"></p>
   </main>
 
   <script type="module">
@@ -43,24 +45,49 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJidm95YnJ1a25kY3Vob2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MTEwOTUsImV4cCI6MjA3MDE4NzA5NX0.NpWuEjax44L5-wjoEHaDh32NQjr5qN3hawRKRHgIbag'
     );
 
-    const form = document.getElementById('login-form');
+    const form = document.getElementById('auth-form');
     const errorMsg = document.getElementById('error-msg');
+    const signupBtn = document.getElementById('signup-btn');
+    let isSignUpMode = false;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errorMsg.classList.add('hidden');
+
       const email = form.email.value.trim();
       const password = form.password.value;
 
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        errorMsg.textContent = error.message;
-        errorMsg.classList.remove('hidden');
+      if (isSignUpMode) {
+        // Sign up user
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+          errorMsg.textContent = error.message;
+          errorMsg.classList.remove('hidden');
+        } else {
+          alert('Sign-up successful! Please check your email to confirm your account.');
+          isSignUpMode = false;
+          form.querySelector('button[type=submit]').textContent = 'Sign In';
+          signupBtn.textContent = 'Sign Up';
+          form.reset();
+        }
       } else {
-        // Redirect to admin panel after login
-        window.location.href = '/su/admin/index.html';
+        // Sign in user
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          errorMsg.textContent = error.message;
+          errorMsg.classList.remove('hidden');
+        } else {
+          window.location.href = '/su/admin/index.html';
+        }
       }
+    });
+
+    signupBtn.addEventListener('click', () => {
+      isSignUpMode = !isSignUpMode;
+      form.querySelector('button[type=submit]').textContent = isSignUpMode ? 'Sign Up' : 'Sign In';
+      signupBtn.textContent = isSignUpMode ? 'Cancel Sign Up' : 'Sign Up';
+      errorMsg.classList.add('hidden');
+      form.reset();
     });
   </script>
 </body>
