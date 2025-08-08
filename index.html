@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demoph Studios</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white font-sans">
+  <header class="p-6 border-b border-gray-800">
+    <h1 class="text-3xl font-bold">Demoph Studios</h1>
+    <p class="text-gray-400">We build worlds. And the tools to make them.</p>
+  </header>
+
+  <main class="p-6 space-y-12">
+    <section>
+      <h2 class="text-2xl font-semibold mb-2">What We Do</h2>
+      <p class="text-gray-300">
+        Demoph Studios is an independent game development studio creating immersive experiences and powerful tools for developers.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-2">Our Projects</h2>
+      <div class="space-y-4">
+        <div class="bg-gray-900 p-4 rounded-xl shadow">
+          <h3 class="text-xl font-bold">Demoph Engine</h3>
+          <p class="text-gray-400">A modern C++ engine built from scratch with Vulkan, OpenGL, Bullet Physics, and OpenAL.</p>
+        </div>
+        <div class="bg-gray-900 p-4 rounded-xl shadow">
+          <h3 class="text-xl font-bold">Upcoming Game Project</h3>
+          <p class="text-gray-400">Currently in stealth. Expect something weird, wild, and probably genre-defying.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-2">Devlog / Blog</h2>
+      <a href="blog.html" class="text-blue-400 hover:underline">View Blog Posts →</a>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-2">Follow Us</h2>
+      <ul class="space-y-2">
+        <li><a href="https://twitter.com/mononeer" class="text-blue-400 hover:underline">@mononeer on X (Twitter)</a></li>
+        <li><a href="https://github.com/demophstudios" class="text-blue-400 hover:underline">GitHub</a></li>
+        <li><a href="#" class="text-blue-400 hover:underline">YouTube (Coming Soon)</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="p-6 border-t border-gray-800 text-sm text-gray-500">
+    &copy; <span id="year"></span> Demoph Studios. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
