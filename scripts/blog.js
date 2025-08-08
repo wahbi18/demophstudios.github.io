@@ -12,9 +12,15 @@ const contentInput = document.getElementById('content');
 const submitBtn = document.getElementById('submit');
 const preview = document.getElementById('preview');
 const postsList = document.getElementById('postList');
+const logoutBtn = document.getElementById('logout');
 
 supabase.auth.getSession().then(({ data }) => {
   if (!data.session) window.location.href = '/su/login.html';
+});
+
+logoutBtn?.addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  window.location.href = '/su/login.html';
 });
 
 submitBtn.addEventListener('click', async () => {
@@ -56,9 +62,9 @@ async function loadPosts() {
     const div = document.createElement('div');
     div.className = 'bg-gray-900 p-4 rounded-xl shadow';
     div.innerHTML = `
-      <h2 class="text-xl font-bold">${post.title}</h2>
+      <h2 class="text-xl font-bold" contenteditable onblur="updatePostTitle(${post.id}, this.innerText)">${post.title}</h2>
       <p class="text-gray-500 text-sm">${new Date(post.date).toLocaleDateString()}</p>
-      <div class="text-gray-300 mt-2">${marked.parse(post.content)}</div>
+      <div class="text-gray-300 mt-2" contenteditable onblur="updatePostContent(${post.id}, this.innerText)">${marked.parse(post.content)}</div>
       <div class="mt-4 space-x-2">
         <button onclick="deletePost(${post.id})" class="bg-red-600 px-2 py-1 rounded">Delete</button>
       </div>
@@ -73,6 +79,14 @@ window.deletePost = async (id) => {
   const { error } = await supabase.from('posts').delete().eq('id', id);
   if (error) alert('Error deleting');
   else loadPosts();
+};
+
+window.updatePostTitle = async (id, newTitle) => {
+  await supabase.from('posts').update({ title: newTitle }).eq('id', id);
+};
+
+window.updatePostContent = async (id, newContent) => {
+  await supabase.from('posts').update({ content: newContent }).eq('id', id);
 };
 
 loadPosts();
